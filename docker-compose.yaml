@@ -1,0 +1,41 @@
+# for indentation use 2 spaces
+# refer the example url https://github.com/dockersamples/example-voting-app/blob/master/docker-compose.yml
+# docker-compose -f docker-compose.yaml up -d
+# docker-compose -f docker-compose.yaml down
+# docker-compose -f docker-compose.yaml up --force-recreate
+# docker-compose -f docker-compose.yaml ps
+#
+version: "3"
+
+networks:
+  defaultdriver:
+    driver: bridge # default network of docker
+
+services:
+  eventmonitor1:
+    build: ./eventmonitor1
+    ports:
+      - 30003:8443
+    depends_on:
+      - mysql8013
+    networks:
+      - defaultdriver
+
+  mysql8013:
+    image: mysql:8.0.13
+    ports:
+      - 33060:3306
+    networks:
+      - defaultdriver
+    environment:
+      MYSQL_DATABASE: Events
+      MYSQL_ROOT_PASSWORD: tcheedel
+
+  mongodb405:
+    image: mongo:4.0.5
+    ports:
+      - 27017:27017
+    networks:
+      - defaultdriver
+    environment:
+      MONGODB_DATABASE: training
